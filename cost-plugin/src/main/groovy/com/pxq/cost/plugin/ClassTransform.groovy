@@ -58,12 +58,16 @@ class ClassTransform extends Transform {
             input.directoryInputs.each { dirInput ->
                 if (inject) {
                     //注入cost统计代码
+                    println '---- injectCost 1 ----'
                     InjectUtil.injectCost(dirInput.file, mProject)
+                    println '---- injectCost 2 ----'
                 }
+                println '---- transform 1 ----'
                 // 将input的目录复制到output指定目录 否则运行时会报ClassNotFound异常
                 def dest = transformInvocation.outputProvider.getContentLocation(dirInput.name,
                         dirInput.contentTypes, dirInput.scopes, Format.DIRECTORY)
                 FileUtils.copyDirectory(dirInput.file, dest)
+                println "---- transform 2 ----${dest.getName()}"
             }
             //不处理jar文件
             input.jarInputs.each { jarInput ->
@@ -72,6 +76,7 @@ class ClassTransform extends Transform {
                 def md5Name = DigestUtils.md5Hex(jarInput.file.getAbsolutePath())
                 if (jarName.endsWith(".jar")) {
                     jarName = jarName.substring(0, jarName.length() - 4)
+                    println "---- transform 2 ----${jarName}"
                 }
                 def dest = transformInvocation.outputProvider.getContentLocation(jarName + md5Name, jarInput.contentTypes, jarInput.scopes, Format.JAR)
                 FileUtils.copyFile(jarInput.file, dest)

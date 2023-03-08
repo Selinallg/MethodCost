@@ -6,6 +6,10 @@ public class JavaBean {
 
     private int code;
 
+    private void setCode(int code){
+        this.code = code;
+    }
+
     public JavaBean(String message, int code) {
         this.message = message;
         this.code = code;

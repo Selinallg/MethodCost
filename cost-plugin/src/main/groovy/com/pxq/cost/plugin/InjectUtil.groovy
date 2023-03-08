@@ -32,6 +32,7 @@ class InjectUtil {
                     println className
                     //注入代码
                     inject(baseClassPath.path, className)
+                    println "inject class : ${className}"
                 }
             }
         }
@@ -44,13 +45,26 @@ class InjectUtil {
      * @param clazz
      */
     private static void inject(String baseClassPath, String clazz) {
+        println("====inject=====")
         def ctClass = sClassPool.get(clazz)
         //解冻
+        println("====inject 1=====${ctClass.getName()}")
         if (ctClass.isFrozen()) {
+            println("====inject 1-1=====")
             ctClass.defrost()
+            println("====inject 1-2=====")
         }
+        println("====inject 2=====")
+        try {
+            println("====inject 2=====length==${ctClass.getDeclaredMethods().length}")
+        } catch (Exception e) {
+            println(" Exception  "+e.getMessage())
+            println(" Exception  "+e.getStackTrace())
+        }
+
         ctClass.getDeclaredMethods().each { ctMethod ->
             //判断是否要处理
+            println("------each-------")
             if (ctMethod.hasAnnotation(MethodCost.class)) {
                 println "before ${ctMethod.name}"
                 //把原方法改名，生成一个同名的代理方法，添加耗时计算
@@ -67,8 +81,10 @@ class InjectUtil {
                 ctClass.addMethod(proxyMethod)
             }
         }
+        println("====inject 3=====")
         ctClass.writeFile(baseClassPath)
         ctClass.detach()//释放
+        println("====inject 5=====")
     }
 
     /**

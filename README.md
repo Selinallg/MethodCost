@@ -65,3 +65,6 @@ cost{
 }
 ...
 ```
+如何引用本地库：
+https://blog.csdn.net/zytygq/article/details/80569015
+https://blog.csdn.net/pxq10422/article/details/101163797
